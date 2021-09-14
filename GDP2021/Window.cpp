@@ -41,15 +41,19 @@ INT Window::init(HINSTANCE hInstance, INT width, INT height, INT nCMDShow)
     if (!RegisterClass(&wc)) return 10;
 
     // 3. calculate window size (optional)
-
+    INT screenWidth = GetSystemMetrics(SM_CXSCREEN);
+    INT screenHeight = GetSystemMetrics(SM_CYSCREEN);
+    RECT r = { (screenWidth - width) / 2, (screenHeight - height) / 2, (screenWidth + width) / 2, (screenHeight + height) / 2 };   // left-top corner, right-bottom corner
+    DWORD style = WS_OVERLAPPEDWINDOW;
+    AdjustWindowRect(&r, style, false);
 
     // 4. create window instance
     _hWnd = CreateWindow(
         wc.lpszClassName,   // window class name a window should be created from
         wc.lpszClassName,   // window title
-        WS_OVERLAPPEDWINDOW,    // window visual style
-        100, 100,   // window position (left-top corner)
-        width, height,  // window size
+        style,    // window visual style
+        r.left, r.top,   // window position (left-top corner)
+        r.right - r.left, r.bottom - r.top,  // window size
         nullptr,    // handle to parent window
         nullptr,    // handle to menu object
         hInstance,

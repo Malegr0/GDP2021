@@ -2,6 +2,7 @@
 #include "Window.h"
 #include "D3D.h"
 #include "Utils.h"
+#include <random>
 
 int WINAPI WinMain(
     HINSTANCE hInstance,        //handle to our application instance (referencing a resource, like a pointer but it isn't always)
@@ -29,9 +30,15 @@ int WINAPI WinMain(
     //run phase
     while (wnd.run())
     {
-        d3d.beginScene(D3DCOLOR_XRGB(255, 0, 0));
+        // draw objects
+        // random colors
+        static std::default_random_engine e;
+        static std::uniform_int_distribution<int> d(0, 255);
+        d3d.beginScene(D3DCOLOR_XRGB(d(e), d(e), d(e)));
+
+        //d3d.beginScene(D3DCOLOR_XRGB(255, 0, 0));
         d3d.endScene();
-        Sleep(10);
+        Sleep(500);
     }
 
     //tidy up
