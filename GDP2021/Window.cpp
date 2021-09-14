@@ -42,6 +42,7 @@ INT Window::init(HINSTANCE hInstance, INT width, INT height, INT nCMDShow)
 
     // 3. calculate window size (optional)
 
+
     // 4. create window instance
     _hWnd = CreateWindow(
         wc.lpszClassName,   // window class name a window should be created from

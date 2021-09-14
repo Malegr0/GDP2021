@@ -1,6 +1,8 @@
 #pragma once
 #include <d3d9.h>
 
+#pragma comment(lib, "d3d9.lib")
+
 class D3D 
 {
 public:

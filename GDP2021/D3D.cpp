@@ -47,10 +47,21 @@ INT D3D::init(HWND hWnd, UINT width, UINT height, BOOL isFullscreen)
 
 void D3D::beginScene(D3DCOLOR backgroundColor)
 {
+	// clear the backbuffer with a solid color
+	_pD3DDevice->Clear(
+		0, nullptr,	// regions to clear
+		D3DCLEAR_TARGET,	// what buffers to clear - target -> back buffer
+		backgroundColor, 1.0f, 0	// clear values - back buffer, depth buffer, stencil buffer
+	);
+	_pD3DDevice->BeginScene();
 }
 
 void D3D::endScene()
 {
+	_pD3DDevice->EndScene();
+
+	// swap front with back buffer
+	_pD3DDevice->Present(nullptr, nullptr, nullptr, nullptr);
 }
 
 void D3D::deInit()
