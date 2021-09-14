@@ -5,7 +5,9 @@ INT Window::init(HINSTANCE hInstance, INT width, INT height, INT nCMDShow)
     // 1. describe the windwo class
     WNDCLASS wc = {};
     wc.hInstance = hInstance;
-    wc.hbrBackground = CreateSolidBrush(RGB(255, 0, 255));
+    wc.hbrBackground = CreateSolidBrush(RGB(255, 0, 255));  //handle to brush (background color)
+    wc.hCursor = LoadCursor(nullptr, IDC_ARROW);    // handle to cursor icon
+    wc.hIcon = LoadIcon(nullptr, IDI_APPLICATION);  // handle to application icon
 
     // 2. register window class
 
