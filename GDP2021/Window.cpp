@@ -3,7 +3,10 @@
 INT Window::init(HINSTANCE hInstance, INT width, INT height, INT nCMDShow)
 {
     // 1. describe the windwo class
-    
+    WNDCLASS wc = {};
+    wc.hInstance = hInstance;
+    wc.hbrBackground = CreateSolidBrush(RGB(255, 0, 255));
+
     // 2. register window class
 
     // 3. calculate window size (optional)
