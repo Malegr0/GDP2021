@@ -7,7 +7,20 @@ LRESULT CALLBACK WndProc(
     LPARAM lParam   // additional message properties (e.g. which key got pressed -> repeat count, value...)
 )
 {
-    return DefWindowProc(hWnd, msg, wParam, lParam);    //everytime there happens something (moving the mouse, window...
+    switch (msg)
+    {
+    case WM_CLOSE:
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        break;
+    case WM_KEYDOWN:
+        if (wParam == VK_ESCAPE) PostQuitMessage(0);
+        break;
+
+    default:
+        return DefWindowProc(hWnd, msg, wParam, lParam);    //everytime there happens something (moving the mouse, window...
+    }
+    return 0;
 }
 
 INT Window::init(HINSTANCE hInstance, INT width, INT height, INT nCMDShow)
@@ -45,14 +58,21 @@ INT Window::init(HINSTANCE hInstance, INT width, INT height, INT nCMDShow)
     if (!_hWnd) return 15;
 
     // 5. show window
-
+    ShowWindow(_hWnd, nCMDShow);    // put window to front
+    SetFocus(_hWnd);    // set keyboard focus to window
 
     return 0;
 }
 
 bool Window::run()
 {
-    return false;
+    static MSG msg = {};
+    if (PeekMessage(&msg, nullptr, 0, UINT_MAX, PM_REMOVE)) // PeekMessage takes last message of the message queue // take next message from message queue and remove
+    {
+        TranslateMessage(&msg); // translating keyboard information into a virtual keyboard table
+        DispatchMessage(&msg);  // send message to window procedure
+    }
+    return msg.message != WM_QUIT;
 }
 
 void Window::deInit()
