@@ -3,6 +3,7 @@
 #include "D3D.h"
 #include "Mesh.h"
 #include "Utils.h"
+#include "Camera.h"
 #include <random>
 
 int WINAPI WinMain(
@@ -37,6 +38,11 @@ int WINAPI WinMain(
     error = mesh.init(d3d.getDevice());
     CheckError(error);
 
+    // 4. create camera
+    Camera camera = {};
+    error = camera.init(width, height);
+    CheckError(error);
+
     //run phase
     while (wnd.run())
     {
@@ -52,6 +58,7 @@ int WINAPI WinMain(
 
         d3d.beginScene(D3DCOLOR_XRGB(0, 0, 0));
 
+        camera.render(d3d.getDevice());
         mesh.render(d3d.getDevice());
 
         d3d.endScene();
