@@ -28,6 +28,10 @@ int WINAPI WinMain(
     error = d3d.init(wnd.getWindowHandle(), width, height, isFullscreen);
     CheckError(error);
 
+    d3d.getDevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID); // solid, wireframe, point
+    d3d.getDevice()->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+    d3d.getDevice()->SetRenderState(D3DRS_LIGHTING, FALSE);
+
     // 3. create Mesh
     Mesh mesh = {};
     error = mesh.init(d3d.getDevice());
@@ -46,7 +50,7 @@ int WINAPI WinMain(
         //static std::uniform_int_distribution<int> d(0, 255);
         //d3d.beginScene(D3DCOLOR_XRGB(d(e), d(e), d(e)));
 
-        d3d.beginScene(D3DCOLOR_XRGB(255, 0, 0));
+        d3d.beginScene(D3DCOLOR_XRGB(0, 0, 0));
 
         mesh.render(d3d.getDevice());
 
