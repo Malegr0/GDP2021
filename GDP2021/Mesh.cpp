@@ -1,6 +1,9 @@
 #include "Mesh.h"
 #include "Utils.h"
 #include "Vertex.h"
+#include <DirectXMath.h>
+
+using namespace DirectX;
 
 INT Mesh::init(IDirect3DDevice9* pD3DDevice)
 {
@@ -9,6 +12,11 @@ INT Mesh::init(IDirect3DDevice9* pD3DDevice)
 
 	error = initIndexBuffer(pD3DDevice);
 	CheckError(error);
+
+	XMMATRIX identity = XMMatrixIdentity();
+	XMFLOAT4X4 worldMatrix;
+	XMStoreFloat4x4(&worldMatrix, identity);
+	_worldMatrix = *reinterpret_cast<D3DMATRIX*>(&worldMatrix);
 
 	return 0;
 }
@@ -19,6 +27,9 @@ void Mesh::update(FLOAT dt)
 
 void Mesh::render(IDirect3DDevice9* pD3DDevice)
 {
+	// set world transformation matrix
+	pD3DDevice->SetTransform(D3DTS_WORLD, &_worldMatrix);
+
 	// set flexible vertex format
 	pD3DDevice->SetFVF(FVF);
 

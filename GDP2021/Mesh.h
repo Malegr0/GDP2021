@@ -19,4 +19,6 @@ private:
 	INT _vertexCount = 0;	// amount of vertices
 	INT _vertexStride = 0;	// size of one vertex
 	INT _indexCount = 0;	// amount of indices
+
+	D3DMATRIX _worldMatrix = {}; // world transformation matrix
 };
