@@ -60,7 +60,7 @@ INT Window::init(HINSTANCE hInstance, INT width, INT height, INT nCMDShow)
         nullptr     // optional parameters
     );
 
-    if (!_hWnd) return 15;
+    if (_hWnd == nullptr) return 15;
 
     // 5. show window
     ShowWindow(_hWnd, nCMDShow);    // put window to front

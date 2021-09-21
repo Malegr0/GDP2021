@@ -5,7 +5,7 @@ INT D3D::init(HWND hWnd, UINT width, UINT height, BOOL isFullscreen)
 {
 	// 1. get Direct3D 9 interface (interface = connection to api)
 	IDirect3D9* pD3D9 = Direct3DCreate9(D3D_SDK_VERSION);
-	if (!pD3D9) return 20;
+	if (pD3D9 == nullptr) return 20;
 
 	// 2. check fixed function pipeline hardware support
 	D3DCAPS9 d3dCaps = {};
