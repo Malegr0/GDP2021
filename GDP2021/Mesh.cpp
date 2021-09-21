@@ -37,7 +37,7 @@ void Mesh::deInit()
 
 INT Mesh::initVertexBuffer(IDirect3DDevice9* pD3DDevice)
 {
-	_vertexCount = 3;
+	_vertexCount = 6;
 	_vertexStride = sizeof(Vertex);
 
 	HRESULT hr = pD3DDevice->CreateVertexBuffer(
@@ -54,9 +54,20 @@ INT Mesh::initVertexBuffer(IDirect3DDevice9* pD3DDevice)
 	CheckFailed(hr, 32);
 
 	// triangle
-	vertices[0] = Vertex(0.0f, 0.5f, 0.0f);
-	vertices[1] = Vertex(0.5f, -0.5f, 0.0f);
-	vertices[2] = Vertex(-0.5f, -0.5f, 0.0f);
+	//vertices[0] = Vertex(0.0f, 0.5f, 0.0f);
+	//vertices[1] = Vertex(0.5f, -0.5f, 0.0f);
+	//vertices[2] = Vertex(-0.5f, -0.5f, 0.0f);
+
+	// quad without index buffer
+	// primitive 1
+	vertices[0] = Vertex(-0.5f, 0.5f, 0.0f);	// left-top
+	vertices[1] = Vertex(0.5f, 0.5f, 0.0f);		// right-top
+	vertices[2] = Vertex(0.5f, -0.5f, 0.0f);	// right-bottom
+
+	// primitive 2
+	vertices[3] = Vertex(-0.5f, 0.5f, 0.0f);	// left-top
+	vertices[4] = Vertex(0.5f, -0.5f, 0.0f);	// right-bottom
+	vertices[5] = Vertex(-0.5f, -0.5f, 0.0f);	// left-bottom
 
 	hr = _pVertexBuffer->Unlock();
 	CheckFailed(hr, 34);
