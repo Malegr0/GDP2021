@@ -6,7 +6,8 @@
 template<typename T>
 void safeRelease(T * &obj)
 {
-	if (obj != nullptr) {
+	if (obj != nullptr) 
+	{
 		obj->Release();
 		obj = nullptr;
 	}

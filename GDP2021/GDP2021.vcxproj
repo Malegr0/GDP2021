@@ -141,9 +141,12 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="D3D.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Time.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Vertex.h" />
+    <ClInclude Include="WICTextureLoader.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
