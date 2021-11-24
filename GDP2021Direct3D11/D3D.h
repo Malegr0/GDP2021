@@ -19,4 +19,5 @@ private:
 	ID3D11DeviceContext* _pD3DDeviceContext = nullptr; // handling render pipeline, e.g. set pipeline resources or draw call
 	IDXGISwapChain* _pDXGISwapChain = nullptr; // hold references to front- and backbuffer and swap them
 	ID3D11RenderTargetView* _pRenderTargetView = nullptr; // describe a target the render pipeline should render on, e.g. backbuffer
+	D3D11_VIEWPORT _viewPort = {}; // describe area projected onto screen
 };

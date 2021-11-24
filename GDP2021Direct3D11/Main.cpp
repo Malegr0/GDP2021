@@ -36,25 +36,25 @@ int WINAPI WinMain(
     //d3d.getDevice()->SetRenderState(D3DRS_LIGHTING, TRUE);
     //d3d.getDevice()->SetRenderState(D3DRS_SPECULARENABLE, TRUE);
 
-    //// 3. create Mesh
-    //Mesh mesh = {};
-    //error = mesh.init(d3d.getDevice());
-    //CheckError(error);
+    // 3. create Mesh
+    Mesh mesh = {};
+    error = mesh.init(d3d.getDevice());
+    CheckError(error);
 
-    //// 4. create camera
-    //Camera camera = {};
-    //error = camera.init(width, height);
-    //CheckError(error);
+    // 4. create camera
+    Camera camera = {};
+    error = camera.init(width, height);
+    CheckError(error);
 
-    //// 5. create time
-    //Time time = {};
-    //error = time.init();
-    //CheckError(error);
+    // 5. create time
+    Time time = {};
+    error = time.init();
+    CheckError(error);
 
-    //// 6. create material
-    //Material material = {};
-    //error = material.init(d3d.getDevice(), TEXT("wall.jpg"));
-    //CheckError(error);
+    // 6. create material
+    Material material = {};
+    error = material.init(d3d.getDevice(), TEXT("wall.jpg"));
+    CheckError(error);
 
     //// 7. create light
     //Light light = {};
@@ -71,8 +71,9 @@ int WINAPI WinMain(
     while (wnd.run())
     {
         // update objects
-        //time.update();
-        //mesh.update(time.getDeltaTime());
+        time.update();
+        camera.update(time.getDeltaTime());
+        mesh.update(time.getDeltaTime());
 
         // draw objects
         // random colors
@@ -82,19 +83,19 @@ int WINAPI WinMain(
 
         d3d.beginScene(0.0f, 0.0f, 0.0f);
 
-        //camera.render(d3d.getDevice());
-        //material.render(d3d.getDevice());
+        material.render(d3d.getDeviceContext(), mesh.getWorldMatrix(), camera.getViewMatrix(), camera.getProjectionMatrix());
         //light.render(d3d.getDevice());
-        //mesh.render(d3d.getDevice());
+        mesh.render(d3d.getDeviceContext());
 
         d3d.endScene();
     }
 
     //tidy up
     //light.deInit();
-    //time.deInit();
-    //camera.deInit();
-    //mesh.deInit();
+    material.deInit();
+    time.deInit();
+    camera.deInit();
+    mesh.deInit();
     d3d.deInit();
     wnd.deInit();
 

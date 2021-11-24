@@ -92,6 +92,7 @@ int WINAPI WinMain(
 
     //tidy up
     light.deInit();
+    material.deInit();
     time.deInit();
     camera.deInit();
     mesh.deInit();

@@ -11,7 +11,7 @@ INT Camera::init(UINT screenWidth, UINT screenHeight)
         XMVector3Rotate(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), XMQuaternionRotationRollPitchYaw(0.0f, 0.0f, 0.0f)), // camera forward vector
         XMVector3Rotate(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), XMQuaternionRotationRollPitchYaw(0.0f, 0.0f, 0.0f)) // camera up vector
     );
-    XMStoreFloat4x4(reinterpret_cast<XMFLOAT4X4*>(&_viewMatrix), viewMatrix);
+    XMStoreFloat4x4(&_viewMatrix, viewMatrix);
 
     // projection matrix
     XMMATRIX projectionMatrix = XMMatrixPerspectiveFovLH(
@@ -19,15 +19,14 @@ INT Camera::init(UINT screenWidth, UINT screenHeight)
         static_cast<FLOAT>(screenWidth) / static_cast<FLOAT>(screenHeight), // aspect ratio, CAUTION: don't divide to integers
         0.3f, 1000.0f // near and far clipping plane
     );
-    XMStoreFloat4x4(reinterpret_cast<XMFLOAT4X4*>(&_projectionMatrix), projectionMatrix);
+    XMStoreFloat4x4(&_projectionMatrix, projectionMatrix);
 
     return 0;
 }
 
-void Camera::render(IDirect3DDevice9* pD3DDevice)
+void Camera::update(FLOAT dt)
 {
-    pD3DDevice->SetTransform(D3DTS_VIEW, &_viewMatrix);
-    pD3DDevice->SetTransform(D3DTS_PROJECTION, &_projectionMatrix);
+    
 }
 
 void Camera::deInit()

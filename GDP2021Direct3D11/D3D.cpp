@@ -50,8 +50,17 @@ INT D3D::init(HWND hWnd, UINT width, UINT height, BOOL isFullscreen)
 
 	safeRelease<ID3D11Texture2D>(pBackBufferTexture);
 
+	// 6. set up view port
+	_viewPort.TopLeftX = 0.0f;
+	_viewPort.TopLeftY = 0.0f;
+	_viewPort.Width = width;
+	_viewPort.Height = height;
+	_viewPort.MinDepth = 0.0f;
+	_viewPort.MaxDepth = 1.0f;
+
 	// 7. set up render pipeline
 	_pD3DDeviceContext->OMSetRenderTargets(1, &_pRenderTargetView, nullptr);
+	_pD3DDeviceContext->RSSetViewports(1, &_viewPort);
 
 	return 0;
 }

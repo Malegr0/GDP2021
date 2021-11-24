@@ -1,24 +1,29 @@
 #pragma once
-#include <d3d9.h>
+#include <d3d11.h>
+#include <DirectXMath.h>
+
+using namespace DirectX;
 
 class Mesh
 {
 public:
-	INT init(IDirect3DDevice9* pD3DDevice);
+	INT init(ID3D11Device* pD3DDevice);
 	void update(FLOAT dt);
-	void render(IDirect3DDevice9* pD3DDevice);
+	void render(ID3D11DeviceContext* pD3DDeviceContext);
 	void deInit();
 
+	XMFLOAT4X4* getWorldMatrix() { return &_worldMatrix; }
+
 private:
-	INT initVertexBuffer(IDirect3DDevice9* pD3DDevice);
-	INT initIndexBuffer(IDirect3DDevice9* pD3DDevice);
+	INT initVertexBuffer(ID3D11Device* pD3DDevice);
+	INT initIndexBuffer(ID3D11Device* pD3DDevice);
 
-	IDirect3DVertexBuffer9* _pVertexBuffer = nullptr;
-	IDirect3DIndexBuffer9* _pIndexBuffer = nullptr;
+	ID3D11Buffer* _pVertexBuffer = nullptr;
+	ID3D11Buffer* _pIndexBuffer = nullptr;
 
-	INT _vertexCount = 0;	// amount of vertices
-	INT _vertexStride = 0;	// size of one vertex
-	INT _indexCount = 0;	// amount of indices
+	UINT _vertexCount = 0;	// amount of vertices
+	UINT _vertexStride = 0;	// size of one vertex
+	UINT _indexCount = 0;	// amount of indices
 
-	D3DMATRIX _worldMatrix = {}; // world transformation matrix
+	XMFLOAT4X4 _worldMatrix = {}; // world transformation matrix
 };
