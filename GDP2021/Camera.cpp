@@ -7,9 +7,9 @@ INT Camera::init(UINT screenWidth, UINT screenHeight)
 {
     // view matrix
     XMMATRIX viewMatrix = XMMatrixLookToLH(
-        XMVectorSet(0.0f, 0.0f, -5.0f, 0.0f), // camera position
-        XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), // camera forward vector
-        XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f) // camera up vector
+        XMVectorSet(0.0f, 0.0f, -1.0f, 0.0f), // camera position
+        XMVector3Rotate(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), XMQuaternionRotationRollPitchYaw(0.0f, 0.0f, 0.0f)), // camera forward vector
+        XMVector3Rotate(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), XMQuaternionRotationRollPitchYaw(0.0f, 0.0f, 0.0f)) // camera up vector
     );
     XMStoreFloat4x4(reinterpret_cast<XMFLOAT4X4*>(&_viewMatrix), viewMatrix);
 

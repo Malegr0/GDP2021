@@ -5,6 +5,9 @@
 #include "Utils.h"
 #include "Camera.h"
 #include <random>
+#include "Time.h"
+#include "Material.h"
+#include "Light.h"
 
 int WINAPI WinMain(
     HINSTANCE hInstance,        //handle to our application instance (referencing a resource, like a pointer but it isn't always)
@@ -21,7 +24,6 @@ int WINAPI WinMain(
     // 1. create a window
     Window wnd = { };
     error = wnd.init(hInstance, width, height, nCMDShow);
-    if (error != 0) return error;
     CheckError(error);
 
     // 2. create Direct3D connection
@@ -31,7 +33,8 @@ int WINAPI WinMain(
 
     d3d.getDevice()->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID); // solid, wireframe, point
     d3d.getDevice()->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
-    d3d.getDevice()->SetRenderState(D3DRS_LIGHTING, FALSE);
+    d3d.getDevice()->SetRenderState(D3DRS_LIGHTING, TRUE);
+    d3d.getDevice()->SetRenderState(D3DRS_SPECULARENABLE, TRUE);
 
     // 3. create Mesh
     Mesh mesh = {};
@@ -43,12 +46,33 @@ int WINAPI WinMain(
     error = camera.init(width, height);
     CheckError(error);
 
+    // 5. create time
+    Time time = {};
+    error = time.init();
+    CheckError(error);
+
+    // 6. create material
+    Material material = {};
+    error = material.init(d3d.getDevice(), TEXT("wall.jpg"));
+    CheckError(error);
+
+    // 7. create light
+    Light light = {};
+    D3DLIGHT9 lightData = {};
+    lightData.Type = D3DLIGHT_DIRECTIONAL;
+    lightData.Direction = { -1.0f, -1.0, 1.0f };
+    lightData.Ambient = { 0.2f, 0.2f, 0.2f, 1.0f };
+    lightData.Diffuse = { 0.6f, 0.6f, 0.6f, 1.0f };
+    lightData.Specular = { 1.0f, 1.0f, 1.0f, 1.0f };
+    error = light.init(lightData);
+    CheckError(error);
+
     //run phase
     while (wnd.run())
     {
         // update objects
-        mesh.update(0.0f);
-
+        time.update();
+        mesh.update(time.getDeltaTime());
 
         // draw objects
         // random colors
@@ -59,13 +83,17 @@ int WINAPI WinMain(
         d3d.beginScene(D3DCOLOR_XRGB(0, 0, 0));
 
         camera.render(d3d.getDevice());
+        material.render(d3d.getDevice());
+        light.render(d3d.getDevice());
         mesh.render(d3d.getDevice());
 
         d3d.endScene();
-        //Sleep(50);
     }
 
     //tidy up
+    light.deInit();
+    time.deInit();
+    camera.deInit();
     mesh.deInit();
     d3d.deInit();
     wnd.deInit();

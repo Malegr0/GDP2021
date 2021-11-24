@@ -10,4 +10,5 @@ public:
 
 private:
 	IDirect3DTexture9* _pTexture = nullptr;
+	D3DMATERIAL9 _material = {};
 };

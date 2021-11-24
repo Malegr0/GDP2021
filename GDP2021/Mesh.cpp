@@ -23,6 +23,26 @@ INT Mesh::init(IDirect3DDevice9* pD3DDevice)
 
 void Mesh::update(FLOAT dt)
 {
+	static FLOAT posX = 0.0f;
+	static FLOAT posY = 0.0f;
+	static FLOAT posZ = 0.0f;
+	static FLOAT rot = 0.0f;
+	rot += XM_PI * 0.1f * dt;
+
+	FLOAT move = dt;
+
+	if ((GetAsyncKeyState(VK_LEFT) & 0x8000) || (GetAsyncKeyState('A') & 0x8000)) posX -= move;
+	if ((GetAsyncKeyState(VK_RIGHT) & 0x8000) || (GetAsyncKeyState('D') & 0x8000)) posX += move;
+	if ((GetAsyncKeyState(VK_UP) & 0x8000) || (GetAsyncKeyState('W') & 0x8000)) posY += move;
+	if ((GetAsyncKeyState(VK_DOWN) & 0x8000) || (GetAsyncKeyState('S') & 0x8000)) posY -= move;
+	if ((GetAsyncKeyState(VK_ADD) & 0x8000) || (GetAsyncKeyState('Q') & 0x8000)) posZ -= move;
+	if ((GetAsyncKeyState(VK_SUBTRACT) & 0x8000) || (GetAsyncKeyState('E') & 0x8000)) posZ += move;
+
+	XMMATRIX translation = XMMatrixTranslation(posX, posY, posZ);
+	XMMATRIX rotation = XMMatrixRotationRollPitchYaw(0.5f, 0.0f, rot);
+	XMMATRIX scaling = XMMatrixScaling(1.0f, 1.0f, 1.0f);
+
+	XMStoreFloat4x4(reinterpret_cast<XMFLOAT4X4*>(&_worldMatrix), scaling * rotation * translation);
 }
 
 void Mesh::render(IDirect3DDevice9* pD3DDevice)
@@ -54,7 +74,7 @@ void Mesh::deInit()
 
 INT Mesh::initVertexBuffer(IDirect3DDevice9* pD3DDevice)
 {
-	_vertexCount = 5;
+	_vertexCount = 4;
 	_vertexStride = sizeof(Vertex);
 
 	HRESULT hr = pD3DDevice->CreateVertexBuffer(
@@ -93,12 +113,24 @@ INT Mesh::initVertexBuffer(IDirect3DDevice9* pD3DDevice)
 	//vertices[3] = Vertex(0.5f, -0.5f, 0.0f);	// right-bottom
 
 	// quad with trianglefan or with trianglelist with index buffer
-	vertices[0] = Vertex(-0.5f, 0.5f, 0.0f, 255, 0, 0);	// left-top
-	vertices[1] = Vertex(0.5f, 0.5f, 0.0f, 0, 255, 0);		// right-top
-	vertices[2] = Vertex(0.5f, -0.5f, 0.0f, 255, 0, 255);	// right-bottom
-	vertices[3] = Vertex(-0.5f, -0.5f, 0.0f, 0, 0, 255);	// left-bottom
-	vertices[4] = Vertex(0.0f, 0.0f, 0.0f, 255, 255, 255);
+	//vertices[0] = Vertex(-0.5f, 0.5f, 0.0f, 255, 0, 0);	// left-top
+	//vertices[1] = Vertex(0.5f, 0.5f, 0.0f, 0, 255, 0);		// right-top
+	//vertices[2] = Vertex(0.5f, -0.5f, 0.0f, 255, 0, 255);	// right-bottom
+	//vertices[3] = Vertex(-0.5f, -0.5f, 0.0f, 0, 0, 255);	// left-bottom
+	//vertices[4] = Vertex(0.0f, 0.0f, 0.0f, 255, 255, 255);
 
+	// quad with uvs
+	//vertices[0] = Vertex(-0.5f, 0.5f, 0.0f, 0.0f, 0.0f); // left-top
+	//vertices[1] = Vertex(0.5f, 0.5f, 0.0f, 1.0f, 0.0f); // right-top
+	//vertices[2] = Vertex(0.5f, -0.5f, 0.0f, 1.0f, 1.0f); // right-bottom
+	//vertices[3] = Vertex(-0.5f, -0.5f, 0.0f, 0.0f, 1.0f); // left-bottom
+	//vertices[4] = Vertex(0.0f, 0.0f, 0.0f, 0.5f, 0.5f); // left-bottom
+
+	// quad with normal & uvs
+	vertices[0] = Vertex(-0.5f, 0.5f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f); // left-top
+	vertices[1] = Vertex(0.5f, 0.5f, 0.0f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f); // right-top
+	vertices[2] = Vertex(0.5f, -0.5f, 0.0f, 0.0f, 0.0f, -1.0f, 1.0f, 1.0f); // right-bottom
+	vertices[3] = Vertex(-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f); // left-bottom
 
 	hr = _pVertexBuffer->Unlock();
 	CheckFailed(hr, 34);
@@ -110,7 +142,7 @@ INT Mesh::initVertexBuffer(IDirect3DDevice9* pD3DDevice)
 
 INT Mesh::initIndexBuffer(IDirect3DDevice9* pD3DDevice)
 {
-	_indexCount = 12;
+	_indexCount = 6;
 
 	HRESULT hr = pD3DDevice->CreateIndexBuffer(_indexCount * sizeof(WORD), D3DUSAGE_WRITEONLY, D3DFMT_INDEX16, D3DPOOL_MANAGED, &_pIndexBuffer, nullptr);
 	CheckFailed(hr, 36);
@@ -121,12 +153,12 @@ INT Mesh::initIndexBuffer(IDirect3DDevice9* pD3DDevice)
 
 	// quad
 	// primitive 1
-	indices[0] = 0; indices[1] = 1; indices[2] = 4;
+	indices[0] = 0; indices[1] = 1; indices[2] = 2;
 
 	// primitive 2
-	indices[3] = 0; indices[4] = 4; indices[5] = 3;
-	indices[6] = 1; indices[7] = 2; indices[8] = 4;
-	indices[9] = 2; indices[10] = 3; indices[11] = 4;
+	indices[3] = 0; indices[4] = 2; indices[5] = 3;
+	//indices[6] = 1; indices[7] = 2; indices[8] = 4;
+	//indices[9] = 2; indices[10] = 3; indices[11] = 4;
 
 	hr = _pIndexBuffer->Unlock();
 	CheckFailed(hr, 39);
