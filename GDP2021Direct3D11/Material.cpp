@@ -35,7 +35,6 @@ void Material::render(IDirect3DDevice9* pD3DDevice)
 
     // set material
     pD3DDevice->SetMaterial(&_material);
-
 }
 
 void Material::deInit()

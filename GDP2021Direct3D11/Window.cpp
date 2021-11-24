@@ -13,6 +13,7 @@ LRESULT CALLBACK WndProc(
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
+
     case WM_KEYDOWN:
         if (wParam == VK_ESCAPE) PostQuitMessage(0);
         break;
